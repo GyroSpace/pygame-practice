@@ -108,7 +108,7 @@ class Pokemon:
             # ----------------------------------If Pokemon2's hasn't fainted, then it's Pokemon2's turn-------------------------
             print(f"Go {Pokemon2.name}!")
             for i, x in enumerate(Pokemon2.moves):
-                print("f{i+1}.", x)
+                print(f"{i+1}.", x)
             index = int(input("Pick a move: "))
             printf(f"{Pokemon2.name} used {moves[index-1]}!")
             time.sleep(1)
@@ -163,25 +163,42 @@ Venusaur = Pokemon('Venusaur', 'Grass', ['Vine Wip', 'Razor Leaf', 'Earthquake',
 # Venusaur.PokemonState()
 
 #
-def pkmn_fight(player, rival_pkmn, catch=False):
+def pkmn_battle(player, wild_pkmn):
     for pokemon in player.pokemon:
         pokemon_obj = player.pokemon[pokemon]
         if len(pokemon_obj.health) != 0:
-            pokemon_obj.fight(rival_pkmn)
+            pokemon_obj.fight(wild_pkmn)
             break
 
-    if catch:
-        if y_or_n(inputf(f"Would you like to catch {rival_pkmn.name}?[Y/n]\t")):
-            if y_or_n(inputf(f"Would you like to nickname {rival_pkmn.name}?[Y/n]\t")):
-                nick = inputf(f"Enter {rival_pkmn.name}'s nickname:\t")
-                player.pokemon[nick] = rival_pkmn
-            else:
-                player.pokemon[rival_pkmn.name] = rival_pkmn
+    if y_or_n(inputf(f"Would you like to catch {wild_pkmn.name}?[Y/n]\t")):
+        if y_or_n(inputf(f"Would you like to nickname {wild_pkmn.name}?[Y/n]\t")):
+            nick = inputf(f"Enter {wild_pkmn.name}'s nickname:\t")
+            player.pokemon[nick] = wild_pkmn
+        else:
+            player.pokemon[wild_pkmn.name] = wild_pkmn
+
+
+def trainer_battle(player, trainer):
+    for pokemon in player.pokemon:
+        pokemon_obj = player.pokemon[pokemon]
+        print(player.pokemon)
+        while len(pokemon_obj.health) != 0:
+            for rival_pkmn in rival.pokemon:
+                rival_pkmn_obj = rival.pokemon[rival_pkmn]
+                pokemon_obj.fight(rival_pkmn_obj)
+
+
+def give_pkmn(player, pkmn):
+    printf(f"{player.name} received {pkmn.name}!")
+    if y_or_n(inputf(f"Would you like to nickname {pkmn.name}?[Y/n]\t")):
+        nick = inputf(f"Enter {pkmn.name}'s nickname:\t")
+        player.pokemon[nick] = pkmn
+    else:
+        player.pokemon[pkmn.name] = pkmn
 
 
 
-hero_volty = Trainer("Volty", "Pallet Town", money=1000, pokemon={"Flareo": Charizard})
+player = Trainer("Klaus", "Pallet Town", 0, {"venusaur": Charizard})
+rival = Trainer("Ben", "Pallet Town", 0, {"venusaur": Venusaur, "blastoise": Blastoise})
 
-pkmn_fight(hero_volty, Venusaur, catch=True)
-print()
-print(hero_volty)
+trainer_battle(player, rival)

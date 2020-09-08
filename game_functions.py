@@ -70,7 +70,7 @@ def confirm(question: str):
 
 def event_choice(events: dict):
     count = len(events)
-    choices = [i for i in range(count)]
+    choices = [i for i in range(1, count + 1)]
     for n, event in zip(choices, events.keys()):
         printf(f"[{n}] {event}")
 
@@ -90,8 +90,9 @@ def event_choice(events: dict):
 
     if choice.isnumeric():
         if int(choice) in choices:
-            decision = list(events.keys())[int(choice)]
+            decision = list(events.keys())[int(choice) - 1]
             check_instance(events[decision])
+            return int(choice)
 
         else:
             printf("Please choose a valid option.")
