@@ -18,24 +18,8 @@ atexit.register(exit_handler)
 
 # -------------------------------------------------------
 
-if __name__ == "__main__":
-    # Create a pokemon
-    Charmander = Pokemon("Charmander", "Fire", ["Ember", "Growl", "Scratch", "Smokes    creen"], {"ATTACK": 12, "DEFENSE": 8},)
-    Charmeleon = Pokemon("Charmeleon", "Fire", ["Flamethrower", "Fly", "Blast Burn", "Fire Punch"], {"ATTACK": 12, "DEFENSE": 8},)
-    Charizard = Pokemon("Charizard", "Fire", ["Flamethrower", "Fly", "Blast Burn", "Fire Punch"], {"ATTACK": 12, "DEFENSE": 8},)
-
-    Squirtle = Pokemon("Squirtle", "Water", ["Water Gun", "Bubblebeam", "Hydro Pump", "Surf"], {"ATTACK": 10, "DEFENSE": 10},)
-    Wartotle = Pokemon("Wartotle", "Water", ["Water Gun", "Bubblebeam", "Hydro Pump", "Surf"], {"ATTACK": 10, "DEFENSE": 10},)
-    Blastoise = Pokemon("Blastoise", "Water", ["Water Gun", "Bubblebeam", "Hydro Pump", "Surf"], {"ATTACK": 10, "DEFENSE": 10},)
-
-    Bulbasaur = Pokemon("Bulbasaur", "Grass", ["Vine Wip", "Razor Leaf", "Earthquake", "Frenzy Plant"], {"ATTACK": 8, "DEFENSE": 12},)
-    Ivysaur = Pokemon("Ivysaur", "Grass", ["Vine Wip", "Razor Leaf", "Earthquake", "Frenzy Plant"], {"ATTACK": 8, "DEFENSE": 12},)
-    Venusaur = Pokemon("Venusaur", "Grass", ["Vine Wip", "Razor Leaf", "Earthquake", "Frenzy Plant"], {"ATTACK": 8, "DEFENSE": 12},)
-
-
-
 # start the BATTLE!
-#Charizard.fight(Venusaur)
+# Charizard.fight(Venusaur)
 
 # -----------------------------------------------------------------------------------------------------------
 

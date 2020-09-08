@@ -23,14 +23,14 @@ class Trainer:
     # capture = True
 
 class Pokemon:
-    def __init__(self, name, types, moves, EVs, health="=" * 25, exp=0):
+    def __init__(self, name, types, moves, EVs, health="=" * 50, exp=0):
         self.name = name
         self.moves = moves
         self.attack = EVs["ATTACK"]
         self.defense = EVs["DEFENSE"]
         self.health = health
         self.types = types
-        self.bars = 20  # Amount of health bars
+        self.bars = 50  # Amount of health bars
         self.exp = exp
 
     def fight(self, Pokemon2):
@@ -62,18 +62,14 @@ class Pokemon:
                     string_2_attack = "It's not very effective..."
                 # Pokemon2 is STRONG against pokemon1
                 if Pokemon2.types == version[(i + 1) % 3]:
-                    Pokemon.attack *= 2
-                    Pokemon2.defense *= 2
-                    self.attack /= 2
-                    self.defense /= 2
+                    Pokemon2.attack *= 1.5
+                    self.attack /= 1.5
                     string_1_attack = "It's not very effective..."
                     string_2_attack = "It's super effective!"
                 # Pokemon 2 is WEAK against Pokemon 1
                 if Pokemon2.types == version[(i + 2) % 3]:
-                    self.attack *= 2
-                    self.defense *= 2
-                    Pokemon2.attack /= 2
-                    Pokemon2.defense /= 2
+                    self.attack *= 1.5
+                    Pokemon2.attack /= 1.5
                     string_1_attack = "It's super effective!"
                     string_2_attack = "It's not very effective..."
         while (self.bars > 0) and (Pokemon2.bars > 0):
@@ -110,7 +106,7 @@ class Pokemon:
             for i, x in enumerate(Pokemon2.moves):
                 print(f"{i+1}.", x)
             index = int(input("Pick a move: "))
-            printf(f"{Pokemon2.name} used {moves[index-1]}!")
+            printf(f"{Pokemon2.name} used {Pokemon2.moves[index-1]}!")
             time.sleep(1)
             printf(string_2_attack)
 
@@ -120,7 +116,7 @@ class Pokemon:
 
             # Add back bars plus give a defense boost
             for j in range(int(self.bars + 0.1 * self.defense)):
-                Pokemon2.health += "="
+                self.health += "="
             time.sleep(1)
             print(f"{self.name}\t\tHLTH\t{self.health}")
             print(f"{Pokemon2.name}\t\tHLTH\t{Pokemon2.health}\n")
@@ -128,7 +124,7 @@ class Pokemon:
 
             # Check if the pokemon has fainted
             if self.bars <= 0:
-                printf("\n...", self.name + " fainted")
+                printf("\n..." + self.name + " fainted")
                 break
         money = np.random.choice(5000)
         printf(f"Opponent paid you {money}.")
@@ -149,16 +145,24 @@ class Pokemon:
 
 
 #--------------------Testing
-Charizard = Pokemon('Charizard', 'Fire', ['Flamethrower', 'Fly', 'Blast Burn', 'Fire Punch'], {'ATTACK':12, 'DEFENSE': 8})
-Blastoise = Pokemon('Blastoise', 'Water', ['Water Gun', 'Bubblebeam', 'Hydro Pump', 'Surf'],{'ATTACK': 10, 'DEFENSE':10})
-Venusaur = Pokemon('Venusaur', 'Grass', ['Vine Wip', 'Razor Leaf', 'Earthquake', 'Frenzy Plant'],{'ATTACK':8, 'DEFENSE':12})
+Charmander = Pokemon("Charmander", "Fire", ["Ember", "Growl", "Scratch", "Smokes    creen"], {"ATTACK": 12, "DEFENSE": 8},)
+Charmeleon = Pokemon("Charmeleon", "Fire", ["Flamethrower", "Fly", "Blast Burn", "Fire Punch"], {"ATTACK": 12, "DEFENSE": 8},)
+Charizard = Pokemon("Charizard", "Fire", ["Flamethrower", "Fly", "Blast Burn", "Fire Punch"], {"ATTACK": 12, "DEFENSE": 8},)
+
+Squirtle = Pokemon("Squirtle", "Water", ["Water Gun", "Bubblebeam", "Hydro Pump", "Surf"], {"ATTACK": 10, "DEFENSE": 10},)
+Wartotle = Pokemon("Wartotle", "Water", ["Water Gun", "Bubblebeam", "Hydro Pump", "Surf"], {"ATTACK": 10, "DEFENSE": 10},)
+Blastoise = Pokemon("Blastoise", "Water", ["Water Gun", "Bubblebeam", "Hydro Pump", "Surf"], {"ATTACK": 10, "DEFENSE": 10},)
+
+Bulbasaur = Pokemon("Bulbasaur", "Grass", ["Vine Wip", "Razor Leaf", "Earthquake", "Frenzy Plant"], {"ATTACK": 8, "DEFENSE": 12},)
+Ivysaur = Pokemon("Ivysaur", "Grass", ["Vine Wip", "Razor Leaf", "Earthquake", "Frenzy Plant"], {"ATTACK": 8, "DEFENSE": 12},)
+Venusaur = Pokemon("Venusaur", "Grass", ["Vine Wip", "Razor Leaf", "Earthquake", "Frenzy Plant"], {"ATTACK": 8, "DEFENSE": 12},)
 #
 # list_of_class_instances = {"Charizard": Charizard, "Blastoise": Blastoise, "Venusaur": Venusaur}
 #
 # for i in list_of_class_instances:
 #     list_of_class_instances[i].PokemonState()
 
-# Charizard.fight(Venusaur)
+#Venusaur.fight(Blastoise)
 #
 # Venusaur.PokemonState()
 
@@ -195,8 +199,6 @@ def give_pkmn(player, pkmn):
         player.pokemon[nick] = pkmn
     else:
         player.pokemon[pkmn.name] = pkmn
-
-
 
 player = Trainer("Klaus", "Pallet Town", 0, {"venusaur": Charizard})
 rival = Trainer("Ben", "Pallet Town", 0, {"venusaur": Venusaur, "blastoise": Blastoise})
