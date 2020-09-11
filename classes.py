@@ -8,6 +8,10 @@ from game_functions import printf, inputf, y_or_n
 turn = 0
 loop = False
 
+super_effective = {"normal":[],"fire":["grass","ice","bug","steel"],"water":["fire","ground","rock"],"electric":["water","flying"],"grass":["water","ground","rock"],"ice":["grass","ground","flying","dragon"],"fighting":["normal","ice","rock","dark","steel"],"poison":["grass","fairy"],"ground":["fire","electric","poison","rock","steel"],"flying":["grass","fighting","bug"],"psychic":["fighting","poison"],"bug":["grass","psychic","dark"],"rock":["fire","ice","flying","bug"],"ghost":["psychic","ghost"],"dragon":["dragon"],"dark":["psychic","ghost"],"steel":["ice","rock","fairy"],"fairy":["fighting","dragon","dark"]}
+normal_effective = {"normal":["normal","fire","water","electric","grass","ice","fighting","poison","ground","flying","psychic","bug","dragon","dark","fairy"],"fire":["normal","electric","fighting","poison","ground","flying","psychic","ghost","dark","fairy"],"water":["normal","electric","ice","fighting","poison","flying","psychic","bug","ghost","dark","steel","fairy"],"electric":["normal","fire","ice","fighting","poison","psychic","bug","rock","ghost","dark","steel","fairy"],"grass":["normal","electric","ice","fighting","psychic","ghost","dark","fairy"],"ice":["normal","electric","fighting","poison","psychic","bug","rock","ghost","dark","fairy"],"fighting":["fire","water","electric","grass","fighting","ground","dragon"],"poison":["normal","fire","water","electric","ice","fighting","flying","psychic","bug","dragon","dark"],"ground":["normal","water","ice","fighting","ground","psychic","ghost","dragon","dark","fairy"],"flying":["normal","fire","water","ice","poison","ground","flying","psychic","ghost","dragon","dark","fairy"],"psychic":["normal","fire","water","electric","grass","ice","ground","flying","bug","rock","ghost","dragon","fairy"],"bug":["normal","water","electric","ice","ground","bug","rock","dragon"],"rock":["normal","water","electric","grass","poison","psychic","rock","ghost","dragon","dark","fairy"],"ghost":["fire","water","electric","grass","ice","fighting","poison","ground","flying","bug","rock","dragon","steel","fairy"],"dragon":["normal","fire","water","electric","grass","ice","fighting","poison","ground","flying","psychic","bug","rock","ghost","dark"],"dark":["normal","fire","water","electric","grass","ice","poison","ground","flying","bug","rock","dragon","steel"],"steel":["normal","grass","fighting","poison","ground","flying","psychic","bug","ghost","dragon","dark"],"fairy":["normal","water","electric","grass","ice","ground","flying","psychic","bug","rock","ghost","fairy"]}
+not_very_effective = {"normal":["rock","steel"],"fire":["fire","water","rock","dragon"],"water":["water","grass","dragon"],"electric":["electric","grass","dragon"],"grass":["fire","grass","poison","flying","bug","dragon","steel"],"ice":["fire","water","ice","steel"],"fighting":["poison","flying","psychic","bug","fairy"],"poison":["poison","ground","rock","ghost"],"ground":["grass","bug"],"flying":["electric","rock","steel"],"psychic":["psychic","steel"],"bug":["fire","fighting","poison","flying","ghost","steel","fairy"],"rock":["fighting","ground","steel"],"ghost":["dark"],"dragon":["steel"],"dark":["fighting","dark","fairy"],"steel":["fire","water","electric","steel"],"fairy":["fire","poison","steel"]}
+no_effect = {"normal":["ghost"],"fire":[],"water":[],"electric":["ground"],"grass":[],"ice":[],"fighting":["ghost"],"poison":["steel"],"ground":["flying"],"flying":[],"psychic":["dark"],"bug":[],"rock":[],"ghost":["normal"],"dragon":["fairy"],"dark":[],"steel":[],"fairy":[]}
 
 class Trainer:
     def __init__(self, name: str, location: str, money=1000, pokemon={}):
@@ -37,7 +41,7 @@ class Pokemon:
         self.attack = EVs["ATTACK"]
         self.defense = EVs["DEFENSE"]
         self.health = health
-        self.types = types
+        self.types = types.split('-')
         self.bars = 50  # Amount of health bars
         self.exp = exp
 
@@ -47,13 +51,13 @@ class Pokemon:
         self.Pokemon2 = Pokemon2
         print("-------POKEMON BATTLE-------")
         print(f"\n{self.name}")
-        print("TYPE/", self.types)
+        print("TYPE/", "-".join(self.types))
         print("ATTACK/", self.attack)
         print("DEFENSE/", self.defense)
         print("LVL/", 3 * (1 + np.mean([self.attack, self.defense])))
         print("\nVS")
         print(f"\n{Pokemon2.name}")
-        print("TYPE/", Pokemon2.types)
+        print("TYPE/", "-".join(Pokemon2.types))
         print("ATTACK/", Pokemon2.attack)
         print("DEFENSE/", Pokemon2.defense)
         print("LVL/", 3 * (1 + np.mean([Pokemon2.attack, Pokemon2.defense])))
@@ -61,26 +65,47 @@ class Pokemon:
         input("\nPress ENTER to continue...")
         os.system("clear")
 
+        # type advantage calculator
+        def effectiveness_calc(Pokemon1_types, Pokemon2_types):
+            effectiveness = 1
+            for pkmn1_type in Pokemon1_types:
+                for pkmn2_type in Pokemon2_types:
+                    if pkmn2_type in super_effective[pkmn1_type]:
+                        effectiveness += 0.5
+                    elif pkmn2_type in not_very_effective[pkmn1_type]:
+                        effectiveness -= 0.25
+                    elif pkmn2_type in no_effect[pkmn1_type]:
+                        effectiveness = 0
+
+            return effectiveness
+
+        # modifies attack stat and changes script accordingly
+        def attack_modifier(attack_stat, effectiveness):
+            # Pokemon's typing doesnt affect the opponent pkmn
+            if effectiveness == 0:
+                attack_stat *= effectiveness
+                return "It has no effect!"
+            # Pokemon's typing is WEAK against opponent pkmn
+            elif effectiveness > 0 and effectiveness < 1:
+                attack_stat *= effectiveness
+                return "It's not very effective..."
+            # Pokemon has NORMAL effect against opponent pokemon
+            elif effectiveness == 1:
+                attack_stat *= effectiveness
+                return ""
+            # Pokemon is STRONG against opponent Pokemon
+            elif effectiveness > 1:
+                attack_stat *= effectiveness
+                return "It's super effective!"
+
         # Consider type advantages
-        version = ["Fire", "Water", "Grass"]
-        for i, k in enumerate(version):
-            if self.types == k:
-                # Both are the same type
-                if Pokemon2.types == k:
-                    string_1_attack = "It's not very effective..."
-                    string_2_attack = "It's not very effective..."
-                # Pokemon2 is STRONG against pokemon1
-                if Pokemon2.types == version[(i + 1) % 3]:
-                    Pokemon2.attack *= 1.5
-                    self.attack /= 1.5
-                    string_1_attack = "It's not very effective..."
-                    string_2_attack = "It's super effective!"
-                # Pokemon 2 is WEAK against Pokemon 1
-                if Pokemon2.types == version[(i + 2) % 3]:
-                    self.attack *= 1.5
-                    Pokemon2.attack /= 1.5
-                    string_1_attack = "It's super effective!"
-                    string_2_attack = "It's not very effective..."
+        self_effectiveness = effectiveness_calc(self.types, Pokemon2.types)
+        pkmn2_effectiveness = effectiveness_calc(Pokemon2.types, self.types)
+
+        # modifying attack stats according to type advantage
+        string_1_attack = attack_modifier(self.attack, self_effectiveness)
+        string_2_attack = attack_modifier(Pokemon2.attack, pkmn2_effectiveness)
+        
 
         def Pokemon1_turn():
             while (self.bars > 0) and (Pokemon2.bars > 0):
@@ -204,13 +229,13 @@ class Pokemon:
         self.Pokemon2 = Pokemon2
         print("-------POKEMON BATTLE-------")
         print(f"\n{self.name}")
-        print("TYPE/", self.types)
+        print("TYPE/", "-".join(self.types))
         print("ATTACK/", self.attack)
         print("DEFENSE/", self.defense)
         print("LVL/", 3 * (1 + np.mean([self.attack, self.defense])))
         print("\nVS")
         print(f"\n{Pokemon2.name}")
-        print("TYPE/", Pokemon2.types)
+        print("TYPE/", "-".join(Pokemon2.types))
         print("ATTACK/", Pokemon2.attack)
         print("DEFENSE/", Pokemon2.defense)
         print("LVL/", 3 * (1 + np.mean([Pokemon2.attack, Pokemon2.defense])))
