@@ -10,4 +10,7 @@
 - volt9801
 
 # Instructions:
-- To run the game use the command: `$ python story.py`
+ ## Linux:
+ - To run the game on a linux distribution use the command `$ python3 story.py`
+## Windows and MacOS:
+- To run the game on Windows or MacOS use the command: `$ python story.py`
