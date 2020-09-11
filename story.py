@@ -6,7 +6,7 @@ import sys
 import time
 from game_functions import *
 from classes import *
-
+from pokemons import *
 
 def exit_handler():
     # exit handler so that user doesnt abruptly exit the game (we can add a function that saved user's progress here)
@@ -19,7 +19,7 @@ atexit.register(exit_handler)
 # -------------------------------------------------------
 
 # start the BATTLE!
-# Charizard.fight(Venusaur)
+Charizard.local_fight(Venusaur)
 
 # -----------------------------------------------------------------------------------------------------------
 

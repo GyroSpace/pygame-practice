@@ -3,6 +3,7 @@ All the functions for the pokemon game are stored here
 """
 
 import sys
+import time
 
 
 def printf(sentence: str):
@@ -10,7 +11,7 @@ def printf(sentence: str):
     for char in sentence:
         sys.stdout.write(char)
         sys.stdout.flush()
-        # time.sleep(0.08)
+        time.sleep(0.08)
     print()
 
 
@@ -19,7 +20,7 @@ def inputf(sentence: str):
     for char in sentence:
         sys.stdout.write(char)
         sys.stdout.flush()
-        # time.sleep(0.08)
+        time.sleep(0.08)
 
     choice = input()
     return choice
