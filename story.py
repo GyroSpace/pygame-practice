@@ -95,6 +95,7 @@ if story == 1:
 			printf("You again don't do anything...")
 			time.sleep(3)
 			printf("Suddendly, the lights are off and you can't see anything")
-			printf("To be continued...")
+			printf("The lights go on again but...")
+			story = random.randrange(1,3)
 else:
 	printf("You sit next to someone very friendly, good luck!...v")
