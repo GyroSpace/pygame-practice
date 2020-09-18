@@ -14,7 +14,7 @@ def dateprint(sentence: str):
     for char in sentence:
         sys.stdout.write(char)
         sys.stdout.flush()
-        time.sleep(0.15)
+        # time.sleep(0.15)
     input()
     print()
 
@@ -24,5 +24,8 @@ def inputf(sentence: str):
     for char in sentence:
         sys.stdout.write(char)
         sys.stdout.flush()
-        time.sleep(0.08)
+        # time.sleep(0.08)
     input()
+def choicef():
+    choice = input("\nChoose your option: ")
+    return choice
